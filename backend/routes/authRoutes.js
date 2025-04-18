@@ -23,7 +23,7 @@ router.post('/signup', async (req, res) => {
 
 
 router.post('/login', async (req, res) => {
-    console.log("Tentative de connexion avec :", req.body); // 🔍 Log des données reçues
+    console.log("Tentative de connexion avec :", req.body); // Log des données reçues
     try {
         const user = await User.findOne({ email: req.body.email });
         if (!user) {

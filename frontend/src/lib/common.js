@@ -4,7 +4,6 @@ import { API_ROUTES } from '../utils/constants';
 function formatBooks(bookArray) {
   return bookArray.map((book) => {
     const newBook = { ...book };
-    // eslint-disable-next-line no-underscore-dangle
     newBook.id = newBook._id;
     return newBook;
   });
@@ -40,7 +39,6 @@ export async function getBooks() {
       method: 'GET',
       url: `${API_ROUTES.BOOKS}`,
     });
-    // eslint-disable-next-line array-callback-return
     const books = formatBooks(response.data);
     return books;
   } catch (err) {
@@ -56,7 +54,6 @@ export async function getBook(id) {
       url: `${API_ROUTES.BOOKS}/${id}`,
     });
     const book = response.data;
-    // eslint-disable-next-line no-underscore-dangle
     book.id = book._id;
     return book;
   } catch (err) {
@@ -67,16 +64,15 @@ export async function getBook(id) {
 
 export async function getBestRatedBooks() {
   try {
-    console.log("📡 Appel API pour les meilleurs livres...");
+    console.log('📡 Appel API pour les meilleurs livres...');
     const response = await axios.get(`${API_ROUTES.BEST_RATED}`);
-    console.log("✅ Données reçues dans getBestRatedBooks :", response.data);
+    console.log('✅ Données reçues dans getBestRatedBooks :', response.data);
     return response.data;
   } catch (e) {
-    console.error("❌ Erreur lors de la récupération des meilleurs livres :", e);
+    console.error('❌ Erreur lors de la récupération des meilleurs livres :', e);
     return [];
   }
 }
-
 
 export async function deleteBook(id) {
   try {
@@ -105,7 +101,6 @@ export async function rateBook(id, userId, rating) {
       },
     });
     const book = response.data;
-    // eslint-disable-next-line no-underscore-dangle
     book.id = book._id;
     return book;
   } catch (e) {
@@ -114,25 +109,24 @@ export async function rateBook(id, userId, rating) {
   }
 }
 
-export async function addBook(data) {
+export async function addBook(inputData) {
   const userId = localStorage.getItem('userId');
   const book = {
     userId,
-    title: data.title,
-    description: data.description,
-    author: data.author,
-    year: data.year,
-    genre: data.genre,
-    price: data.price,
+    title: inputData.title,
+    description: inputData.description,
+    author: inputData.author,
+    year: inputData.year,
+    genre: inputData.genre,
     ratings: [{
       userId,
-      grade: data.rating ? parseInt(data.rating, 10) : 0,
+      grade: inputData.rating ? parseInt(inputData.rating, 10) : 0,
     }],
-    averageRating: parseInt(data.rating, 10),
+    averageRating: parseInt(inputData.rating, 10),
   };
   const bodyFormData = new FormData();
   bodyFormData.append('book', JSON.stringify(book));
-  bodyFormData.append('image', data.file[0]);
+  bodyFormData.append('image', inputData.file[0]);
 
   try {
     return await axios({
@@ -149,22 +143,21 @@ export async function addBook(data) {
   }
 }
 
-export async function updateBook(data, id) {
+export async function updateBook(inputData, id) {
   const userId = localStorage.getItem('userId');
-
-  let newData;
   const book = {
     userId,
-    title: data.title,
-    author: data.author,
-    year: data.year,
-    genre: data.genre,
+    title: inputData.title,
+    author: inputData.author,
+    year: inputData.year,
+    genre: inputData.genre,
   };
-  console.log(data.file[0]);
-  if (data.file[0]) {
+
+  let newData;
+  if (inputData.file[0]) {
     newData = new FormData();
     newData.append('book', JSON.stringify(book));
-    newData.append('image', data.file[0]);
+    newData.append('image', inputData.file[0]);
   } else {
     newData = { ...book };
   }

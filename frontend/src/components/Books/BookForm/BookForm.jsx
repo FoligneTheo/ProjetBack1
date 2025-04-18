@@ -24,12 +24,13 @@ function BookForm({ book, validate }) {
       author: book?.author,
       year: book?.year,
       genre: book?.genre,
-      price: book?.price,
     }), [book]),
   });
+
   useEffect(() => {
     reset(book);
   }, [book]);
+
   const file = watch(['file']);
   const [filePreview] = useFilePreview(file);
 
@@ -45,39 +46,37 @@ function BookForm({ book, validate }) {
     }
   }, [formState]);
 
-  const onSubmit = async (data) => {
-    // Vérification avant l'envoi
-    console.log(" Données envoyées au backend :", {
-        ...data,
-        rating,
-    });
+  const onSubmit = async (formData) => {
+    const preparedData = { ...formData };
 
     if (!book) {
-        if (!data.file[0]) {
-            alert('Vous devez ajouter une image');
-        }
-        if (!data.rating) {
-            data.rating = rating || 0; // Ajouter la note à l'objet envoyé
-        }
+      if (!preparedData.file[0]) {
+        alert('Vous devez ajouter une image');
+        return;
+      }
 
-        const newBook = await addBook(data);
-        if (!newBook.error) {
-            validate(true);
-        } else {
-            alert(newBook.message);
-        }
+      if (!preparedData.rating) {
+        preparedData.rating = rating || 0;
+      }
+
+      const newBook = await addBook(preparedData);
+      if (!newBook.error) {
+        validate(true);
+      } else {
+        alert(newBook.message);
+      }
     } else {
-        const updatedBook = await updateBook(data, data.id);
-        if (!updatedBook.error) {
-            navigate('/');
-        } else {
-            alert(updatedBook.message);
-        }
+      const updatedBook = await updateBook(preparedData, preparedData.id);
+      if (!updatedBook.error) {
+        navigate('/');
+      } else {
+        alert(updatedBook.message);
+      }
     }
-};
-
+  };
 
   const readOnlyStars = !!book;
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={styles.Form}>
       <input type="hidden" id="id" {...register('id')} />
@@ -101,10 +100,6 @@ function BookForm({ book, validate }) {
         <p>Genre</p>
         <input type="text" id="genre" {...register('genre')} />
       </label>
-      <label htmlFor="price">
-        <p>Prix</p>
-        <input type="number" id="price" min={0} {...register('price')} />
-      </label>
       <label htmlFor="rate">
         <p>Note</p>
         <div className={styles.Stars}>
@@ -125,7 +120,6 @@ function BookForm({ book, validate }) {
               <p>Ajouter une image</p>
             </>
           )}
-
         </div>
         <input {...register('file')} type="file" id="file" />
       </label>
@@ -145,7 +139,6 @@ BookForm.propTypes = {
     year: PropTypes.number,
     imageUrl: PropTypes.string,
     genre: PropTypes.string,
-    price: PropTypes.number,
     ratings: PropTypes.arrayOf(PropTypes.shape({
       userId: PropTypes.string,
       grade: PropTypes.number,
@@ -159,4 +152,5 @@ BookForm.defaultProps = {
   book: null,
   validate: null,
 };
+
 export default BookForm;

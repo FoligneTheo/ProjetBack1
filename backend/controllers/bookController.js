@@ -70,46 +70,46 @@ exports.getAllBooks = async (req, res) => {
 // Noter un livre
 exports.rateBook = async (req, res) => {
     try {
-        console.log("📩 Note reçue :", req.body);
-        console.log("📚 ID du livre :", req.params.id);
-        console.log("🔐 User ID :", req.auth.userId);
+        console.log(" Note reçue :", req.body);
+        console.log(" ID du livre :", req.params.id);
+        console.log(" User ID :", req.auth.userId);
         
-        // ✅ Correction : Utiliser rating au lieu de grade
+        // Correction : Utiliser rating au lieu de grade
         const { rating } = req.body;
-        const grade = parseInt(rating, 10);  // 🔄 Convertir en nombre
+        const grade = parseInt(rating, 10);  // Convertir en nombre
         
         if (isNaN(grade) || grade < 0 || grade > 5) {
-            console.error("❌ Note invalide !");
+            console.error(" Note invalide !");
             return res.status(400).json({ error: "La note doit être comprise entre 0 et 5." });
         }
         
         const book = await Book.findById(req.params.id);
         if (!book) {
-            console.error("❌ Livre non trouvé !");
+            console.error(" Livre non trouvé !");
             return res.status(404).json({ error: "Livre non trouvé" });
         }
         
-        console.log("📘 Livre trouvé :", book.title);
+        console.log(" Livre trouvé :", book.title);
         
         const existingRating = book.ratings.find(r => r.userId === req.auth.userId);
         if (existingRating) {
-            console.error("❌ L'utilisateur a déjà noté ce livre !");
+            console.error(" L'utilisateur a déjà noté ce livre !");
             return res.status(400).json({ error: "Vous avez déjà noté ce livre" });
         }
         
         book.ratings.push({ userId: req.auth.userId, grade });
         
-        // ✅ Calcul de la moyenne des notes
+        // Calcul de la moyenne des notes
         const total = book.ratings.reduce((sum, r) => sum + r.grade, 0);
         book.averageRating = total / book.ratings.length;
         
-        console.log("📊 Nouvelle moyenne :", book.averageRating);
+        console.log(" Nouvelle moyenne :", book.averageRating);
         
         await book.save();
-        console.log("✅ Livre mis à jour avec succès !");
+        console.log(" Livre mis à jour avec succès !");
         res.status(200).json(book);
     } catch (error) {
-        console.error("🔥 Erreur serveur :", error);
+        console.error(" Erreur serveur :", error);
         res.status(500).json({ error: error.message });
     }
 };
@@ -164,13 +164,13 @@ exports.getBookById = async (req, res) => {
     try {
         const book = await Book.findById(req.params.id);
         if (!book) {
-            console.log("❌ Livre non trouvé !");
+            console.log(" Livre non trouvé !");
             return res.status(404).json({ message: "Livre non trouvé" });
         }
-        console.log("📚 Livre trouvé :", book);
+        console.log(" Livre trouvé :", book);
         res.status(200).json(book);
     } catch (error) {
-        console.error("❌ Erreur lors de la récupération du livre :", error);
+        console.error(" Erreur lors de la récupération du livre :", error);
         res.status(500).json({ message: "Erreur interne du serveur" });
     }
 };
@@ -180,12 +180,12 @@ exports.getBestRatedBooks = async (req, res) => {
     try {
         const books = await Book.find()
             .sort({ averageRating: -1 }) // Trie par moyenne décroissante
-            .limit(3); // Garde seulement les 3 premiers
+            .limit(3);
 
-        console.log("📊 Livres les mieux notés envoyés :", books);
+        console.log(" Livres les mieux notés envoyés :", books);
         res.status(200).json(books);
     } catch (error) {
-        console.error("❌ Erreur lors de la récupération des meilleurs livres :", error);
+        console.error(" Erreur lors de la récupération des meilleurs livres :", error);
         res.status(500).json({ error: error.message });
     }
 };
