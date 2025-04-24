@@ -64,12 +64,12 @@ export async function getBook(id) {
 
 export async function getBestRatedBooks() {
   try {
-    console.log('📡 Appel API pour les meilleurs livres...');
+    console.log('Appel API pour les meilleurs livres...');
     const response = await axios.get(`${API_ROUTES.BEST_RATED}`);
-    console.log('✅ Données reçues dans getBestRatedBooks :', response.data);
+    console.log('Données reçues dans getBestRatedBooks :', response.data);
     return response.data;
   } catch (e) {
-    console.error('❌ Erreur lors de la récupération des meilleurs livres :', e);
+    console.error('Erreur lors de la récupération des meilleurs livres :', e);
     return [];
   }
 }

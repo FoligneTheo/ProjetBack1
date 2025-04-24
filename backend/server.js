@@ -6,7 +6,7 @@ const authRoutes = require('./routes/authRoutes');
 const bookRoutes = require('./routes/bookRoutes');
 
 dotenv.config();
-console.log("🔐 JWT_SECRET chargé :", process.env.JWT_SECRET);
+console.log("JWT_SECRET chargé :", process.env.JWT_SECRET);
 const app = express();
 
 // Définition des origines autorisées dynamiquement
@@ -59,13 +59,13 @@ mongoose.connect(process.env.MONGO_URI, {
 // Port et lancement du serveur
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
-    console.log(`🚀 Serveur lancé sur http://localhost:${PORT}`);
+    console.log(`Serveur lancé sur http://localhost:${PORT}`);
 });
 
 
 // Middleware global de gestion des erreurs
 app.use((err, req, res, next) => {
-    console.error('🔥 Erreur non capturée :', err);
+    console.error('Erreur non capturée :', err);
     if (err.name === 'ValidationError') {
       return res.status(400).json({ message: err.message, error: err });
     }

@@ -27,19 +27,15 @@ export function useBestRatedBooks() {
     async function getRatedBooks() {
       const books = await getBestRatedBooks();
 
-      // Vérification des données reçues
-      console.log("📊 Livres récupérés avant tri :", books);
+      console.log("Livres récupérés avant tri :", books);
 
-      // Transformation : `_id` → `id`
       const formattedBooks = books.map(book => ({ ...book, id: book._id }));
 
-      // Tri des livres par `averageRating` (du plus grand au plus petit)
       const sortedBooks = formattedBooks.sort((a, b) => b.averageRating - a.averageRating);
 
-      // On garde seulement les 3 meilleurs
       const topBooks = sortedBooks.slice(0, 3);
 
-      console.log("🏆 Top 3 livres les mieux notés :", topBooks);
+      console.log("Top 3 livres les mieux notés :", topBooks);
 
       setBestRatedBooks(topBooks);
     }
