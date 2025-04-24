@@ -8,7 +8,7 @@ exports.addBook = async (req, res) => {
         console.log(" Données reçues :", req.body);  // Vérifier les données reçues
 
         const bookData = JSON.parse(req.body.book);
-        console.log("🎯 Données après parsing :", bookData);
+        console.log(" Données après parsing :", bookData);
 
         if (!bookData.title || !bookData.userId) {
             console.error(" Erreur : Titre et utilisateur obligatoires !");
