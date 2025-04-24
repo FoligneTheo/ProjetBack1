@@ -17,8 +17,7 @@ export function displayStars(rating) {
   return stars;
 }
 export function generateStarsInputs(rating, register, readOnly = false) {
-  console.log("⭐ Note sélectionnée :", rating); // ✅ Ajout du log
-  
+  console.log('Note sélectionnée :', rating);
   const stars = [];
   for (let i = 1; i < 6; i += 1) {
     if (rating > 0 && i <= Math.round(rating)) {

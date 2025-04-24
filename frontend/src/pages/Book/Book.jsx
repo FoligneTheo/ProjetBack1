@@ -22,9 +22,9 @@ function Book() {
 
   useEffect(() => {
     async function getItem() {
-      console.log("ID du livre demandé :", params.id);
+      console.log('ID du livre demandé :', params.id);
       const data = await getBook(params.id);
-      console.log("Données reçues du backend :", data);
+      console.log('Données reçues du backend :', data);
       if (data) {
         setBook(data);
       }

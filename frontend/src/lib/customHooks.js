@@ -27,15 +27,15 @@ export function useBestRatedBooks() {
     async function getRatedBooks() {
       const books = await getBestRatedBooks();
 
-      console.log("Livres récupérés avant tri :", books);
+      console.log('Livres récupérés avant tri :', books);
 
-      const formattedBooks = books.map(book => ({ ...book, id: book._id }));
+      const formattedBooks = books.map((book) => ({ ...book, id: book._id }));
 
       const sortedBooks = formattedBooks.sort((a, b) => b.averageRating - a.averageRating);
 
       const topBooks = sortedBooks.slice(0, 3);
 
-      console.log("Top 3 livres les mieux notés :", topBooks);
+      console.log('Top 3 livres les mieux notés :', topBooks);
 
       setBestRatedBooks(topBooks);
     }
@@ -44,7 +44,6 @@ export function useBestRatedBooks() {
 
   return { bestRatedBooks };
 }
-
 
 export function useFilePreview(file) {
   const fileInput = file[0] ?? [];

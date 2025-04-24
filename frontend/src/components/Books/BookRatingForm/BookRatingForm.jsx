@@ -27,7 +27,7 @@ function BookRatingForm({
     }
   }, [formState]);
   const onSubmit = async (formData) => {
-    console.log("📨 Note envoyée :", formData.rating);
+    console.log('Note envoyée :', formData.rating);
     if (!connectedUser || !auth) {
       navigate(APP_ROUTES.SIGN_IN);
     }
