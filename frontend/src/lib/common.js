@@ -114,7 +114,6 @@ export async function addBook(inputData) {
   const book = {
     userId,
     title: inputData.title,
-    description: inputData.description,
     author: inputData.author,
     year: inputData.year,
     genre: inputData.genre,

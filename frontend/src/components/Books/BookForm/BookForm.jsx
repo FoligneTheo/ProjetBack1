@@ -20,7 +20,6 @@ function BookForm({ book, validate }) {
   } = useForm({
     defaultValues: useMemo(() => ({
       title: book?.title,
-      description: book?.description,
       author: book?.author,
       year: book?.year,
       genre: book?.genre,
@@ -84,10 +83,6 @@ function BookForm({ book, validate }) {
         <p>Titre du livre</p>
         <input type="text" id="title" {...register('title')} />
       </label>
-      <label htmlFor="description">
-        <p>Description</p>
-        <input type="text" id="description" {...register('description')} />
-      </label>
       <label htmlFor="author">
         <p>Auteur</p>
         <input type="text" id="author" {...register('author')} />
@@ -134,7 +129,6 @@ BookForm.propTypes = {
     _id: PropTypes.string,
     userId: PropTypes.string,
     title: PropTypes.string,
-    description: PropTypes.string,
     author: PropTypes.string,
     year: PropTypes.number,
     imageUrl: PropTypes.string,
