@@ -14,6 +14,7 @@ const allowedOrigins = [
     'http://localhost:3001', // FRONTEND tourne sur 3001
     'https://mon-site.com', // Remplace par l'URL de ton site en production
 'http://localhost:3000',
+'http://localhost:4000',
 ];
 
 // Middleware CORS dynamique

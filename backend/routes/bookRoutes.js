@@ -16,14 +16,3 @@ router.delete("/:id", auth, bookController.deleteBook);
 router.get("/:id", bookController.getBookById);
 
 module.exports = router;
-
-
-
-
-// userId: '67b62637922bffb62dc0e6f4',
-// title: 'dyth',
-// author: 'dtgrhuy',
-// year: 'dyj',
-// genre: 'dyj',
-// ratings: [ { userId: '67b62637922bffb62dc0e6f4', grade: 0 } ],
-// averageRating: 0
