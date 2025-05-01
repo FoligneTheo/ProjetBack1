@@ -4,6 +4,8 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const authRoutes = require('./routes/authRoutes');
 const bookRoutes = require('./routes/bookRoutes');
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json');
 
 dotenv.config();
 console.log("JWT_SECRET chargé :", process.env.JWT_SECRET);
@@ -48,6 +50,7 @@ app.use('/uploads', express.static('uploads'));
 // Déclaration des routes
 app.use('/api/auth', authRoutes);
 app.use('/api/books', bookRoutes);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Connexion à MongoDB
 mongoose.connect(process.env.MONGO_URI, {

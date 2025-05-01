@@ -1,0 +1,259 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+      "title": "API de gestion des livres",
+      "version": "1.0.0",
+      "description": "Cette API permet de gérer des livres avec authentification, notation, et upload d'images."
+    },
+    "paths": {
+      "/api/auth/signup": {
+        "post": {
+          "summary": "Inscription",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserSignup"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": { "description": "Utilisateur créé" },
+            "400": { "description": "Erreur d'inscription" }
+          }
+        }
+      },
+      "/api/auth/login": {
+        "post": {
+          "summary": "Connexion",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserLogin"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": { "description": "Connexion réussie avec token" },
+            "401": { "description": "Identifiants invalides" }
+          }
+        }
+      },
+      "/api/books": {
+        "get": {
+          "summary": "Récupérer tous les livres",
+          "responses": {
+            "200": {
+              "description": "Liste des livres",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": { "$ref": "#/components/schemas/Book" }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "summary": "Ajouter un livre",
+          "security": [{ "bearerAuth": [] }],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "multipart/form-data": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookCreate"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": { "description": "Livre ajouté" },
+            "400": { "description": "Erreur lors de l'ajout" }
+          }
+        }
+      },
+      "/api/books/best-rated": {
+        "get": {
+          "summary": "Obtenir les livres les mieux notés",
+          "responses": {
+            "200": {
+              "description": "Liste des meilleurs livres",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": { "$ref": "#/components/schemas/Book" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/books/{id}/rating": {
+        "post": {
+          "summary": "Noter un livre",
+          "security": [{ "bearerAuth": [] }],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": { "type": "string" }
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rating"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": { "description": "Note enregistrée" },
+            "400": { "description": "Erreur lors de la notation" }
+          }
+        }
+      },
+      "/api/books/{id}": {
+        "get": {
+          "summary": "Récupérer un livre par ID",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": { "type": "string" }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Livre trouvé",
+              "content": {
+                "application/json": {
+                  "schema": { "$ref": "#/components/schemas/Book" }
+                }
+              }
+            },
+            "404": { "description": "Livre non trouvé" }
+          }
+        },
+        "put": {
+          "summary": "Modifier un livre",
+          "security": [{ "bearerAuth": [] }],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": { "type": "string" }
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "multipart/form-data": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookCreate"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": { "description": "Livre mis à jour" },
+            "400": { "description": "Erreur lors de la mise à jour" }
+          }
+        },
+        "delete": {
+          "summary": "Supprimer un livre",
+          "security": [{ "bearerAuth": [] }],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": { "type": "string" }
+            }
+          ],
+          "responses": {
+            "200": { "description": "Livre supprimé" },
+            "404": { "description": "Livre non trouvé" }
+          }
+        }
+      }
+    },
+    "components": {
+      "securitySchemes": {
+        "bearerAuth": {
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        }
+      },
+      "schemas": {
+        "UserSignup": {
+          "type": "object",
+          "properties": {
+            "email": { "type": "string", "format": "email" },
+            "password": { "type": "string" }
+          },
+          "required": ["email", "password"]
+        },
+        "UserLogin": {
+          "type": "object",
+          "properties": {
+            "email": { "type": "string", "format": "email" },
+            "password": { "type": "string" }
+          },
+          "required": ["email", "password"]
+        },
+      
+        "Book": {
+          "type": "object",
+          "properties": {
+            "_id": { "type": "string" },
+            "title": { "type": "string" },
+            "author": { "type": "string" },
+            "year": { "type": "integer" },
+            "genre": { "type": "string" },
+            "imageUrl": { "type": "string", "format": "uri" },
+            "userId": { "type": "string" },
+            "ratings": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "userId": { "type": "string" },
+                  "grade": { "type": "integer", "minimum": 0, "maximum": 5 }
+                }
+              }
+            },
+            "averageRating": { "type": "number", "format": "float" }
+          }
+        },
+        "BookCreate": {
+          "type": "object",
+          "properties": {
+            "title": { "type": "string" },
+            "author": { "type": "string" },
+            "year": { "type": "integer" },
+            "genre": { "type": "string" },
+            "image": { "type": "string", "format": "binary" }
+          },
+          "required": ["title", "image"]
+        }
+      }
+    }
+  }
+  
